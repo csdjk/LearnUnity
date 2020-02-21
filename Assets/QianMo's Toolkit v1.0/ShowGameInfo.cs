@@ -34,11 +34,13 @@ public class ShowGameInfo : MonoBehaviour
         if (ShowGUI)
         {
             //隐藏光标
-            Screen.lockCursor = false;
+            // Screen.lockCursor = false;
+            Cursor.lockState = UnityEngine.CursorLockMode.None;
 
             if (LockCursor)
             {
-                Screen.lockCursor = true;
+                Cursor.lockState = UnityEngine.CursorLockMode.Locked;
+                // Screen.lockCursor = true;
             }
 
         }
@@ -52,7 +54,7 @@ public class ShowGameInfo : MonoBehaviour
             GUILayout.Label(" 欢迎来到浅墨的Unity3D游戏编程Demo~");
             GUILayout.Label(" 此为【浅墨Unity Shader编程】系列文章之一的配套场景");
             //开始Horizontal（水平组），用于创建水平的文字+按钮混合效果
-            GUILayout.BeginHorizontal(); 
+            GUILayout.BeginHorizontal();
             GUILayout.Label(" 查看此场景配套博文请访问：");
             if (GUILayout.Button("http://blog.csdn.net/poem_qianmo"))
             {
@@ -63,11 +65,11 @@ public class ShowGameInfo : MonoBehaviour
 
 
             //左上方帧数显示
-            if (++count>10)
+            if (++count > 10)
             {
-               count = 0;
-               milliSecond= deltaTime * 1000.0f;
-               fps=1.0f / deltaTime;
+                count = 0;
+                milliSecond = deltaTime * 1000.0f;
+                fps = 1.0f / deltaTime;
             }
 
             string text = string.Format(" 当前每帧渲染间隔：{0:0.0} ms ({1:0.} 帧每秒)", milliSecond, fps);
@@ -99,7 +101,8 @@ public class ShowGameInfo : MonoBehaviour
             if (buttonEscClicked)
             {
                 //解锁鼠标、显示光标
-                Screen.lockCursor = false;
+                // Screen.lockCursor = false;
+                Cursor.lockState = UnityEngine.CursorLockMode.Locked;
                 Cursor.visible = true;
                 //显示退出对话框
                 GUI.Box(new Rect(Screen.width / 2 - 50, Screen.height / 2 - 60, 100, 120), "是否退出？");
@@ -114,7 +117,9 @@ public class ShowGameInfo : MonoBehaviour
                     //置ESC键标识为false
                     buttonEscClicked = false;
                     //恢复显示图标
-                    Screen.lockCursor = true;
+                    // Screen.lockCursor = true;
+                    Cursor.lockState  = UnityEngine.CursorLockMode.Locked;
+
                     Cursor.visible = false;
                 }
             }

@@ -1,0 +1,32 @@
+ManifestFileVersion: 0
+CRC: 3474568472
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: bc99d3cf23367d4a326bfcb0ecc64136
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 98bf8902dba10ca277db995a4b6ea698
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 135
+  Script: {instanceID: 0}
+Assets:
+- Assets/Scenes/LoadFormFileAB/Prefabs/assetBundle_Sphere.prefab
+- Assets/Scenes/LoadFormFileAB/Prefabs/assetBundle_Cube.prefab
+Dependencies:
+- E:/WorkSpaces/Unity/LearnUnity/AssetBundles/matrials.lcl

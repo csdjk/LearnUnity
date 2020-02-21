@@ -1,0 +1,11 @@
+ManifestFileVersion: 0
+CRC: 3822138971
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: obj.lcl
+      Dependencies:
+        Dependency_0: matrials.lcl
+    Info_1:
+      Name: matrials.lcl
+      Dependencies: {}
