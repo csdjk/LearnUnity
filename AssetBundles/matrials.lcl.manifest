@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1634871913
+CRC: 990450440
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 839f9c152e0b73f9bdabf298baf40e7b
+    Hash: 65ba4f1df043407e0bb5f5647f4fe8df
   TypeTreeHash:
     serializedVersion: 2
     Hash: fe397485c3cec1106b49e9ff95e8f8a2
@@ -16,7 +16,7 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 Assets:
-- Assets/Scenes/LoadFormFileAB/Matrials/assetBundle_Fabric.mat
-- Assets/Scenes/LoadFormFileAB/Textures/assetBundle_NORM.png
-- Assets/Scenes/LoadFormFileAB/Textures/assetBundle_Fabric.png
+- Assets/Scenes/LoadFormFileAssetBundle/Matrials/assetBundle_Fabric.mat
+- Assets/Scenes/LoadFormFileAssetBundle/Textures/assetBundle_NORM.png
+- Assets/Scenes/LoadFormFileAssetBundle/Textures/assetBundle_Fabric.png
 Dependencies: []

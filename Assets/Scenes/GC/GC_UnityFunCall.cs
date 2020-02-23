@@ -29,7 +29,7 @@ public class GC_UnityFunCall : MonoBehaviour {
         Debug.Log(isPlayer);
     }
 
-    private string playerTag_O = "Player";
+    // private string playerTag_O = "Player";
     // void OnTriggerStay (Collider other) {
     //     bool isPlayer = other.gameObject.CompareTag (playerTag_O);
     //     Debug.Log(isPlayer);

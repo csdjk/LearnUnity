@@ -1,11 +1,14 @@
 ManifestFileVersion: 0
-CRC: 3822138971
+CRC: 711484859
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
+      Name: matrials.lcl
+      Dependencies: {}
+    Info_1:
       Name: obj.lcl
       Dependencies:
         Dependency_0: matrials.lcl
-    Info_1:
-      Name: matrials.lcl
+    Info_2:
+      Name: newobj.u3d
       Dependencies: {}
