@@ -9,11 +9,11 @@
 2. 将XLua-master文件夹下的`Tools`文件夹复制到我们项目的根文件下与Assets文件夹同级。如果没不这样做，当我们更改脚本并“Generate Code”生成代码后，当点击“Hotfix Inject in Editor”会报错。
 ;
 
-#### 1.首先创建一个打包AssetBundle资源的脚本 [BuildAssetBundles.cs](./Editor/BuildAssetBundles.cs)，并且放在Editor文件夹下
+#### 1.首先创建一个打包AssetBundle资源的脚本 [BuildAssetBundles.cs](../../Editor/BuildAssetBundles.cs)，并且放在Editor文件夹下
 
 #### 2. 点击编辑器菜单 Asset -> Build AssetBundles 构建资源
 
-#### 3. 把根路径的AssetBundles文件夹 上传到服务器，该demo测试服务器为 [webSereve](../webSereve/README.md)，点击 `NetBox2.exe` 运行即可启动服务器， 并且把AssetBundles放在服务器根目录下。
+#### 3. 把根路径的AssetBundles文件夹 上传到服务器，该demo测试服务器为 [webSereve](../../webSereve/README.md)，点击 `NetBox2.exe` 运行即可启动服务器， 并且把AssetBundles放在服务器根目录下。
 
 #### 4. 运行工程，通过之前写好的[DownLoad.cs](./Scripts/DownLoad.cs)脚本，运行读取下载好的lua脚本即可。
 
