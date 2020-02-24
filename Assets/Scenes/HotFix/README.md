@@ -7,11 +7,7 @@
 1. 打开HotFix的宏。打开`File -> Build Setting -> Player Setting ->Scriptsing Define Symbols` ，然后在里面输入宏`HOTFIX_ENABLE`，按ENTER后，Unity后台会编译一下。编译过后会在编译器XLua下面多一个“Hotfix Inject in Editor”（`XLua -> Hotfix Inject in Editor`）。
 
 2. 将XLua-master文件夹下的`Tools`文件夹复制到我们项目的根文件下与Assets文件夹同级。如果没不这样做，当我们更改脚本并“Generate Code”生成代码后，当点击“Hotfix Inject in Editor”会报错。
-
-作者：天蝎钰狮子
-链接：https://www.jianshu.com/p/381080428c3a
-来源：简书
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+;
 
 #### 1.首先创建一个打包AssetBundle资源的脚本 [BuildAssetBundles.cs](./Editor/BuildAssetBundles.cs)，并且放在Editor文件夹下
 

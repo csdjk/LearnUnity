@@ -12,6 +12,7 @@ xlua.hotfix(class, [method_name], fix)
  fix ： 如果传了method_name，fix将会是一个function，否则通过table提供一组函数。table的组织按key是method_name，value是function的方式。
 --]]
 -- 替换掉 GameScript 的 Update 方法
+
 xlua.hotfix(CS.GameScript,"Update",
     function(self)
         -- print(self.num1,self.num2)
