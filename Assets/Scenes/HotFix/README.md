@@ -57,7 +57,7 @@ public class BuildAssetBundles
 
 然后创建 GameScript.cs 和 DownLoad.cs 脚本，并且挂载到场景空物体上，分别拖拽Slider 和 Text 到DownLoad脚本的公共属性，把 StartDownLoad方法绑定到Button组件的点击事件:
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-yBikQ5gb-1584196102306)(/markdown/images/5e6c8e5cedbc2a24dfa43a47)\]](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9jb25uZWN0LWNkbi1wdWJsaWMtcHJkLnVuaXR5Y2hpbmEuY24vaDEvMjAyMDAzMTQvcC9pbWFnZXMvMWVkYzRmZGEtYzQxYi00YzYzLWI4MzctNjQzZTc4MzU3NzNlX1NuaXBhc3RlXzIwMjBfMDNfMTRfMTVfNTVfMTEucG5n?x-oss-process=image/format,png)
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9jb25uZWN0LWNkbi1wdWJsaWMtcHJkLnVuaXR5Y2hpbmEuY24vaDEvMjAyMDAzMTQvcC9pbWFnZXMvMWVkYzRmZGEtYzQxYi00YzYzLWI4MzctNjQzZTc4MzU3NzNlX1NuaXBhc3RlXzIwMjBfMDNfMTRfMTVfNTVfMTEucG5n?x-oss-process=image/format,png)
 
 **GameScript.cs ：**
 
@@ -212,7 +212,7 @@ public class DownLoad : MonoBehaviour
 
 此时运行游戏，点击鼠标左键会创建一个Cube。
 后面我们通过热更新的方式，去修改该方法，使之点击创建Sphere！
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-FwJ5lIFG-1584196102307)(/markdown/images/5e6ce434edbc2a014d5d7129)\]](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9jb25uZWN0LWNkbi1wdWJsaWMtcHJkLnVuaXR5Y2hpbmEuY24vaDEvMjAyMDAzMTQvcC9pbWFnZXMvNzA0OTljZTAtNDUzYi00ZDYxLWFjOGUtZTIyMmRkYmYyOGZmX1NuaXBhc3RlXzIwMjBfMDNfMTRfMjJfMDFfMjIucG5n?x-oss-process=image/format,png)
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9jb25uZWN0LWNkbi1wdWJsaWMtcHJkLnVuaXR5Y2hpbmEuY24vaDEvMjAyMDAzMTQvcC9pbWFnZXMvNzA0OTljZTAtNDUzYi00ZDYxLWFjOGUtZTIyMmRkYmYyOGZmX1NuaXBhc3RlXzIwMjBfMDNfMTRfMjJfMDFfMjIucG5n?x-oss-process=image/format,png)
 
 ## 四. 创建lua补丁脚本和打包AssetBundles资源
 创建一个lua脚本，命名为**luaScript.lua.txt**
@@ -259,7 +259,7 @@ xlua.hotfix(CS.GameScript,"Update",
 ```
 
 在打包之前我们先把需要热更新的资源标记 AssetBundle，如下图,标记Sphere和lua脚本 : 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-OI6sQK8Z-1584196102307)(/markdown/images/5e6c8feaedbc2a1e52ed8f10)\]](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9jb25uZWN0LWNkbi1wdWJsaWMtcHJkLnVuaXR5Y2hpbmEuY24vaDEvMjAyMDAzMTQvcC9pbWFnZXMvMTY2NTAyODMtMmYyMy00ZGFmLTgxYjUtY2E5NjVjN2NjYjU4X1NuaXBhc3RlXzIwMjBfMDNfMTRfMTZfMDNfMzEucG5n?x-oss-process=image/format,png)
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9jb25uZWN0LWNkbi1wdWJsaWMtcHJkLnVuaXR5Y2hpbmEuY24vaDEvMjAyMDAzMTQvcC9pbWFnZXMvMTY2NTAyODMtMmYyMy00ZGFmLTgxYjUtY2E5NjVjN2NjYjU4X1NuaXBhc3RlXzIwMjBfMDNfMTRfMTZfMDNfMzEucG5n?x-oss-process=image/format,png)
 
 最后, 点击 Asset -> Build AssetBundles  按钮打包，打包成功后 我们可以在项目根目录 发现 **AssetBundles** 文件夹, 里面的就是我们打包出来的AssetBundle资源，最终会传到服务器上
 
@@ -270,7 +270,7 @@ xlua.hotfix(CS.GameScript,"Update",
 
 **目录结构如下：**
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-Rh5QtnHB-1584196102307)(/markdown/images/5e6c908bedbc2a2722aae6d9)\]](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9jb25uZWN0LWNkbi1wdWJsaWMtcHJkLnVuaXR5Y2hpbmEuY24vaDEvMjAyMDAzMTQvcC9pbWFnZXMvN2JiMmIxMTMtMDkwZi00ZDljLTgxMWYtNTM3MWJhNjYzMmEyX1NuaXBhc3RlXzIwMjBfMDNfMTRfMTZfMDZfMjEucG5n?x-oss-process=image/format,png)
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9jb25uZWN0LWNkbi1wdWJsaWMtcHJkLnVuaXR5Y2hpbmEuY24vaDEvMjAyMDAzMTQvcC9pbWFnZXMvN2JiMmIxMTMtMDkwZi00ZDljLTgxMWYtNTM3MWJhNjYzMmEyX1NuaXBhc3RlXzIwMjBfMDNfMTRfMTZfMDZfMjEucG5n?x-oss-process=image/format,png)
 
 ### 六. 最后，运行测试Demo
 在测试前我们先删掉Resources文件夹下面的Sphere预制体和luaScript.lua脚本！
@@ -284,9 +284,9 @@ xlua.hotfix(CS.GameScript,"Update",
 3. 点击运行测试。
 
 如果最终生成的是Sphere 则说明热更新成功
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-eRKMU5SY-1584196102308)(/markdown/images/5e6ce673edbc2a0020f7b49b)\]](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9jb25uZWN0LWNkbi1wdWJsaWMtcHJkLnVuaXR5Y2hpbmEuY24vaDEvMjAyMDAzMTQvcC9pbWFnZXMvZGQwZGJiNmUtODFmNi00NzRlLTg3MjUtNjI5ZTM1NDgxYzlmXzIwMjAwMjI0MjIzMzEzNTUwLnBuZw?x-oss-process=image/format,png)
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9jb25uZWN0LWNkbi1wdWJsaWMtcHJkLnVuaXR5Y2hpbmEuY24vaDEvMjAyMDAzMTQvcC9pbWFnZXMvZGQwZGJiNmUtODFmNi00NzRlLTg3MjUtNjI5ZTM1NDgxYzlmXzIwMjAwMjI0MjIzMzEzNTUwLnBuZw?x-oss-process=image/format,png)
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-qZQv5UAY-1584196102308)(/markdown/images/5e6ce68bedbc2a2b0aa06bea)\]](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9jb25uZWN0LWNkbi1wdWJsaWMtcHJkLnVuaXR5Y2hpbmEuY24vaDEvMjAyMDAzMTQvcC9pbWFnZXMvYjMzOTAwOGUtYjM5MS00YTEyLTg2ZWItYzhlOTVhYzUzMGU1X1NuaXBhc3RlXzIwMjBfMDNfMTRfMjJfMTFfNTcucG5n?x-oss-process=image/format,png)
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9jb25uZWN0LWNkbi1wdWJsaWMtcHJkLnVuaXR5Y2hpbmEuY24vaDEvMjAyMDAzMTQvcC9pbWFnZXMvYjMzOTAwOGUtYjM5MS00YTEyLTg2ZWItYzhlOTVhYzUzMGU1X1NuaXBhc3RlXzIwMjBfMDNfMTRfMjJfMTFfNTcucG5n?x-oss-process=image/format,png)
 
 # 最后
 该Demo已经上传到我的 [GitHub](https://github.com/csdjk/LearnUnity/tree/master/Assets/Scenes/HotFix) 上，欢迎Star，谢谢！
