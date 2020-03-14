@@ -15,13 +15,22 @@ xlua.hotfix(class, [method_name], fix)
 
 xlua.hotfix(CS.GameScript,"Update",
     function(self)
-        -- print(self.num1,self.num2)
         if unity.Input.GetMouseButtonDown(0) then
             local go = unity.GameObject.Find("ScriptsManager")
+            -- 获取assetBundle资源
             local ab = go:GetComponent("DownLoad").assetBundle
-            -- 读取创建 Sphere
+            -- 读取创建 Sphere 
             local SphereGo = ab:LoadAsset("Sphere")
-            unity.GameObject.Instantiate(SphereGo)
+
+            -- 在鼠标点击的位置实例Sphere
+            local ray = unity.Camera.main:ScreenPointToRay (unity.Input.mousePosition)
+            local flag,hit = CS.GameScript.RayFunction(ray)
+            if flag then
+                print(hit.transform.name)
+                local sphere = unity.GameObject.Instantiate(SphereGo)
+                sphere.transform.localPosition = hit.point + unity.Vector3(0,1,0)
+            end
+        
         end
     end
 )

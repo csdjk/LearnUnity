@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 4242717664
+CRC: 4021809133
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 18867b49e86d5f91616946ddba7e1e87
+    Hash: 53cd3b9ef3feb9d2960e66d9443b4c2f
   TypeTreeHash:
     serializedVersion: 2
     Hash: a5eedd1c513212b0d7ee9e28e9c7be45
@@ -28,6 +28,7 @@ ClassTypes:
 - Class: 135
   Script: {instanceID: 0}
 Assets:
+- Assets/Scenes/HotFix/Resources/SphereMat.mat
 - Assets/Scenes/HotFix/Resources/Sphere.prefab
 - Assets/Scenes/HotFix/Scripts/luaScript.lua.txt
 Dependencies: []

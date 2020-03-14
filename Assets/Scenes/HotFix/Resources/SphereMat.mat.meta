@@ -1,7 +1,8 @@
 fileFormatVersion: 2
-guid: c9d45a0ae4156e5448b4c01c53079856
-PrefabImporter:
+guid: 582ab826beeb89048acfd5d59b2e85fe
+NativeFormatImporter:
   externalObjects: {}
+  mainObjectFileID: 2100000
   userData: 
   assetBundleName: newobj
   assetBundleVariant: u3d
