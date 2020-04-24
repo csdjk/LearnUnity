@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿// Create By 长生但酒狂
+// Create Time 2020.4.23
+
+using System.IO;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Animations;
@@ -15,7 +18,7 @@ public class BuildAnimationAndPrefab : EditorWindow
     public Rect buildPathRect;
 
 
-    [MenuItem("Tools/构建Animation")]
+    [MenuItem("长生但酒狂的插件/构建Animation")]
     public static void showWindow()
     {
         // 能悬浮、能拖拽、能嵌入
@@ -39,7 +42,7 @@ public class BuildAnimationAndPrefab : EditorWindow
         // this.path = EditorGUILayout.TextField(this.path);
         GUI.SetNextControlName("input1");//设置下一个控件的名字
         pathRect = EditorGUILayout.GetControlRect(GUILayout.Width(400));
-        EditorGUI.TextField(pathRect, path);
+        path = EditorGUI.TextField(pathRect, path);
         EditorGUILayout.Space();
 
         // 构建后的路径
@@ -48,7 +51,7 @@ public class BuildAnimationAndPrefab : EditorWindow
         // this.buildPath = EditorGUILayout.TextField(this.buildPath);
         GUI.SetNextControlName("input2");//设置下一个控件的名字
         buildPathRect = EditorGUILayout.GetControlRect(GUILayout.Width(400));
-        EditorGUI.TextField(buildPathRect, buildPath);
+        buildPath = EditorGUI.TextField(buildPathRect, buildPath);
         EditorGUILayout.Space();
 
         // 文件拖拽

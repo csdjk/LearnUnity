@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿// Create By 长生但酒狂
+// Create Time 2020.4.23
+
+using UnityEngine;
 using UnityEditor;
+// ---------------------------【文件拖拽到Editor面板】---------------------------
 public class DragFloderWindow : EditorWindow
 {
-
       // 当前选择路径
     public string path = "Assets";
     public Rect pathRect;
@@ -12,7 +15,7 @@ public class DragFloderWindow : EditorWindow
     public Rect buildPathRect;
 
 
-    [MenuItem("Tools/文件拖拽")]
+    [MenuItem("长生但酒狂的插件/文件拖拽")]
     static void createWindow()
     {
         var window = EditorWindow.GetWindow<DragFloderWindow>(false, "FolderWindow");
@@ -28,7 +31,7 @@ public class DragFloderWindow : EditorWindow
         // this.path = EditorGUILayout.TextField(this.path);
         GUI.SetNextControlName("input1");//设置下一个控件的名字
         pathRect = EditorGUILayout.GetControlRect(GUILayout.Width(400));
-        EditorGUI.TextField(pathRect, path);
+        path = EditorGUI.TextField(pathRect, path);
         EditorGUILayout.Space();
 
         // 构建后的路径
@@ -37,7 +40,7 @@ public class DragFloderWindow : EditorWindow
         // this.buildPath = EditorGUILayout.TextField(this.buildPath);
         GUI.SetNextControlName("input2");//设置下一个控件的名字
         buildPathRect = EditorGUILayout.GetControlRect(GUILayout.Width(400));
-        EditorGUI.TextField(buildPathRect, buildPath);
+        buildPath = EditorGUI.TextField(buildPathRect, buildPath);
         EditorGUILayout.Space();
 
         // 文件拖拽

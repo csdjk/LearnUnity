@@ -9,3 +9,8 @@
 # 3.一键生成Animator和Prefab
 
 ![BuildAnimationAndPrefab.gif](https://i.loli.net/2020/04/23/8B7hwQTy6jeCHg1.gif)
+
+
+# 4.从FBX导出材质球、设置Shader
+
+![ExtractMaterial.gif](https://i.loli.net/2020/04/24/TtnJ2gAzkGQxIrj.gif)

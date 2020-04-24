@@ -7,7 +7,7 @@ public class BuildAssetBundles
 {
 
     // 菜单选项目录
-    [MenuItem("Assets/Build AssetBundles")]
+    [MenuItem("长生但酒狂的插件/Build AssetBundles")]
     static public void BuildAllAssetBundles()
     {
         // 创建文件目录
