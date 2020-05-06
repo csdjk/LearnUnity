@@ -39,7 +39,6 @@ public class BuildAnimationAndPrefab : EditorWindow
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("需要打包的路径 (鼠标拖拽文件夹到这里)");
         EditorGUILayout.Space();
-        // this.path = EditorGUILayout.TextField(this.path);
         GUI.SetNextControlName("input1");//设置下一个控件的名字
         pathRect = EditorGUILayout.GetControlRect(GUILayout.Width(400));
         path = EditorGUI.TextField(pathRect, path);
@@ -48,7 +47,6 @@ public class BuildAnimationAndPrefab : EditorWindow
         // 构建后的路径
         EditorGUILayout.LabelField("打包后的路径 (鼠标拖拽文件夹到这里)");
         EditorGUILayout.Space();
-        // this.buildPath = EditorGUILayout.TextField(this.buildPath);
         GUI.SetNextControlName("input2");//设置下一个控件的名字
         buildPathRect = EditorGUILayout.GetControlRect(GUILayout.Width(400));
         buildPath = EditorGUI.TextField(buildPathRect, buildPath);

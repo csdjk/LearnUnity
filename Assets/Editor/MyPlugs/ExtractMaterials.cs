@@ -1,25 +1,41 @@
 ﻿// Create By 长生但酒狂
 // Create Time 2020.4.24
-
 using System.IO;
 using UnityEngine;
 using UnityEditor;
-using System.Collections.Generic;
-using System.Linq;
 
-// ---------------------------【从FBX导出材质和设置shader】---------------------------
+// ---------------------------【一键从FBX导出材质和设置shader】---------------------------
 public class ExtractMaterials : EditorWindow
 {
     // 当前选择路径
     public string modelPath = "Assets";
     public Rect modelRect;
     // shader
-    public string shaderName = "LayaAir3D/Mesh/PBR(Standard)";
+    int selectShaderIndex = 0;
+    string[] shaderNameLists;
+    // Scale Factor
+    int scaleFactor = 1;
+
 
     [MenuItem("长生但酒狂的插件/导出材质和修改Shader")]
     public static void showWindow()
     {
         EditorWindow.CreateInstance<ExtractMaterials>().Show();
+    }
+
+    private void Awake()
+    {
+        // 获取所有Shader
+        ShaderInfo[] shaderLists = ShaderUtil.GetAllShaderInfo();
+        shaderNameLists = new string[shaderLists.Length];
+        for (int i = 0; i < shaderLists.Length; i++)
+        {
+            shaderNameLists[i] = shaderLists[i].name;
+            if (shaderNameLists[i] == "LayaAir3D/Mesh/PBR(Standard)")
+            {
+                selectShaderIndex = i;
+            }
+        }
     }
 
     public void OnGUI()
@@ -32,30 +48,47 @@ public class ExtractMaterials : EditorWindow
         modelRect = EditorGUILayout.GetControlRect();
         modelPath = EditorGUI.TextField(modelRect, modelPath);
         EditorGUILayout.Space();
-
-        // Shader名称
-        EditorGUILayout.LabelField("Shader名称 (如: LayaAir3D/Mesh/PBR(Standard))");
         EditorGUILayout.Space();
-        GUI.SetNextControlName("input2");//设置下一个控件的名字
-        shaderName = EditorGUILayout.TextField(shaderName);
+
+        // Shader下拉列表
+        EditorGUILayout.LabelField("当前选中Shader：");
+        EditorGUILayout.Space();
+        selectShaderIndex = EditorGUILayout.Popup(selectShaderIndex, shaderNameLists);
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+
+        // scale Factor
+        EditorGUILayout.LabelField("模型缩放设置");
+        scaleFactor = EditorGUILayout.IntField("Scale Factor：", scaleFactor);
+
+        EditorGUILayout.Space();
         EditorGUILayout.Space();
 
         // 文件拖拽
         DragFolder();
 
+        // 设置模型缩放比例
+        if (GUILayout.Button("设置模型缩放比例"))
+        {
+            ForEachModels(true);
+        }
+        EditorGUILayout.Space();
+
         // 导出材质
         if (GUILayout.Button("导出材质球"))
         {
-            StartExtractMaterialsFromFBX();
+            ForEachModels(false);
         }
 
         EditorGUILayout.Space();
 
         // 设置Shader
-        if (GUILayout.Button("修改Shader"))
+        if (GUILayout.Button("设置Shader"))
         {
-            setMaterialShader();
+            ForEachMaterials();
         }
+
+
     }
 
     // 鼠标拖拽文件
@@ -86,16 +119,19 @@ public class ExtractMaterials : EditorWindow
         }
     }
 
-    void StartExtractMaterialsFromFBX()
+    // 遍历模型
+    void ForEachModels(bool isSetModelSetup)
     {
         string[] allPath = AssetDatabase.FindAssets("t:GameObject", new string[] { modelPath });
-        Debug.Log("-- allPath: " + allPath.Length);
+        // Debug.Log("-- allPath: " + allPath.Length);
         for (int i = 0, len = allPath.Length; i < len; i++)
         {
             string filePath = AssetDatabase.GUIDToAssetPath(allPath[i]);
             // 设置模型
-            setModelSetup(filePath);
-            ExtractMaterialsFromFBX(filePath);
+            if (isSetModelSetup)
+                setModelSetup(filePath);
+            else
+                ExtractMaterialsFromFBX(filePath);
         }
         // 如果选取的是FBX模型文件
         if (allPath.Length == 0)
@@ -103,8 +139,10 @@ public class ExtractMaterials : EditorWindow
             if (Path.GetExtension(modelPath) == ".fbx")
             {
                 // 设置模型
-                setModelSetup(modelPath);
-                ExtractMaterialsFromFBX(modelPath);
+                if (isSetModelSetup)
+                    setModelSetup(modelPath);
+                else
+                    ExtractMaterialsFromFBX(modelPath);
             }
             else
             {
@@ -122,54 +160,26 @@ public class ExtractMaterials : EditorWindow
         // 如果不存在该文件夹则创建一个新的
         if (!AssetDatabase.IsValidFolder(materialFolder))
             AssetDatabase.CreateFolder(Path.GetDirectoryName(assetPath), "Material");
-
-        HashSet<string> hashSet = new HashSet<string>();
-        IEnumerable<Object> enumerable = from x in AssetDatabase.LoadAllAssetsAtPath(assetPath)
-                                         where x.GetType() == typeof(Material)
-                                         select x;
-        foreach (Object item in enumerable)
+        // 获取 assetPath 下所有资源。
+        Object[] assets = AssetDatabase.LoadAllAssetsAtPath(assetPath);
+        foreach (Object item in assets)
         {
-            string path = System.IO.Path.Combine(materialFolder, item.name) + ".mat";
-            path = AssetDatabase.GenerateUniqueAssetPath(path);
-            string value = AssetDatabase.ExtractAsset(item, path);
-            if (string.IsNullOrEmpty(value))
+            if (item.GetType() == typeof(Material))
             {
-                hashSet.Add(assetPath);
+                string path = System.IO.Path.Combine(materialFolder, item.name) + ".mat";
+                // 为资源创建一个新的唯一路径。
+                path = AssetDatabase.GenerateUniqueAssetPath(path);
+                // 通过在导入资源（例如，FBX 文件）中提取外部资源，在对象（例如，材质）中创建此资源。
+                string value = AssetDatabase.ExtractAsset(item, path);
+                // 成功提取( 如果 Unity 已成功提取资源，则返回一个空字符串)
+                if (string.IsNullOrEmpty(value))
+                {
+                    AssetDatabase.WriteImportSettingsIfDirty(assetPath);
+                    AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
+                }
             }
-        }
-
-        foreach (string item2 in hashSet)
-        {
-            AssetDatabase.WriteImportSettingsIfDirty(item2);
-            AssetDatabase.ImportAsset(item2, ImportAssetOptions.ForceUpdate);
         }
         Debug.Log(Path.GetFileName(assetPath) + " 的 Material 导出成功!!");
-    }
-
-
-    void setMaterialShader()
-    {
-        string[] allPath = AssetDatabase.FindAssets("t:Material", new string[] { this.modelPath });
-        if (allPath.Length == 0)
-        {
-            Debug.LogError("当前选择目录未找到Material: " + this.modelPath);
-            return;
-        }
-
-        for (int i = 0, len = allPath.Length; i < len; i++)
-        {
-            string filePath = AssetDatabase.GUIDToAssetPath(allPath[i]);
-            Material mat = AssetDatabase.LoadAssetAtPath<Material>(filePath);
-            Shader mShader = Shader.Find(shaderName);
-            if (mShader == null)
-            {
-                Debug.LogError("设置shader失败, 未找到该shader: " + shaderName);
-                return;
-            }
-            mat.shader = mShader;
-            // AssetDatabase.Refresh();
-        }
-        Debug.Log("Material Shader 设置完成, 一共: " + allPath.Length + "个");
     }
 
     // 修改模型设置
@@ -178,10 +188,44 @@ public class ExtractMaterials : EditorWindow
         ModelImporter importer = (ModelImporter)ModelImporter.GetAtPath(path);
         if (importer)
         {
-            importer.animationType = ModelImporterAnimationType.Generic;
-            importer.globalScale = 100;
+            importer.globalScale = scaleFactor;
             importer.SaveAndReimport();
+            Debug.Log("Scale Factor 设置成功: " + Path.GetFileName(path));
         }
+    }
+
+    // 遍历材质
+    void ForEachMaterials()
+    {
+        string[] allPath = AssetDatabase.FindAssets("t:Material", new string[] { modelPath });
+        if (allPath.Length == 0)
+        {
+            if (System.IO.Path.GetExtension(modelPath) == ".mat")
+                setMaterialShader(modelPath);
+            else
+                Debug.LogError("当前目录未找到Material: " + modelPath);
+            return;
+        }
+
+        for (int i = 0, len = allPath.Length; i < len; i++)
+        {
+            string filePath = AssetDatabase.GUIDToAssetPath(allPath[i]);
+            setMaterialShader(filePath);
+        }
+        Debug.Log("Material Shader 设置完成, 一共: " + allPath.Length + "个");
+    }
+
+    void setMaterialShader(string path)
+    {
+        Material mat = AssetDatabase.LoadAssetAtPath<Material>(path);
+        Shader mShader = Shader.Find(shaderNameLists[selectShaderIndex]);
+        if (mShader == null)
+        {
+            Debug.LogError("设置shader失败, 未找到该shader: " + shaderNameLists[selectShaderIndex]);
+            return;
+        }
+        mat.shader = mShader;
+        // AssetDatabase.Refresh();
     }
 
 }

@@ -16,12 +16,13 @@ public class SelectWindow : EditorWindow
     public static void showWindow()
     {
         EditorWindow.GetWindow<SelectWindow>().Show();
-    }
 
+    }
 
 
     public void OnGUI()
     {
+        // DisplayShaderContext(EditorGUILayout.GetControlRect());
         string[] strs = new[]
         {
             "数组下标0",
@@ -45,6 +46,16 @@ public class SelectWindow : EditorWindow
 
         //枚举选择
         this.mEnum = (EnumTest)EditorGUILayout.EnumPopup(this.mEnum);
+
+        // shader 下拉列表
+        EditorGUILayout.LabelField("Shader下拉列表");
+        ShaderInfo[] shaderLists = ShaderUtil.GetAllShaderInfo();
+        string[] nameLists = new string[shaderLists.Length];
+        for (int i = 0; i < shaderLists.Length; i++)
+        {
+            nameLists[i] = shaderLists[i].name;
+        }
+        EditorGUILayout.Popup(this.index, nameLists);
 
     }
 
