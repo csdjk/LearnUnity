@@ -12,7 +12,7 @@ public class SelectWindow : EditorWindow
     public EnumTest mEnum;
 
 
-    [MenuItem("Editor基本组件/下拉选择框")]
+    [MenuItem("Editor教程/基本组件/下拉选择框")]
     public static void showWindow()
     {
         EditorWindow.GetWindow<SelectWindow>().Show();

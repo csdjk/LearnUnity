@@ -5,7 +5,7 @@ using UnityEditor;
 // ---------------------------【自定义窗口显示及事件】---------------------------
 public class CustomWindow : EditorWindow
 {
-    [MenuItem("Editor基本组件/显示窗口")]
+    [MenuItem("Editor教程/基本组件/显示窗口")]
     public static void showWindow()
     {
         // 能悬浮、能拖拽、能嵌入
@@ -17,6 +17,7 @@ public class CustomWindow : EditorWindow
 
     }
 
+   
 
     // ->绘制窗口
     public void OnGUI()

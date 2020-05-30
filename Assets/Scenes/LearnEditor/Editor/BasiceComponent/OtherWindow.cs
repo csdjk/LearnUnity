@@ -4,7 +4,7 @@ using UnityEditor;
 
 public class OtherFiledWindow : EditorWindow 
 {
-    [MenuItem("Editor基本组件/曲线")]
+    [MenuItem("Editor教程/基本组件/曲线")]
     public static void showWindow()
     {
         EditorWindow.GetWindow<OtherFiledWindow>().Show();

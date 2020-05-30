@@ -59,7 +59,7 @@ public class ShowObjectInfo : MonoBehaviour
             if (style == null)
             {
                 //新建一个largeLabel的GUI风格
-                style = new GUIStyle(EditorStyles.largeLabel);
+                style = new GUIStyle(EditorStyles.label);
                 //设置文本居中对齐
                 style.alignment = TextAnchor.MiddleCenter;
                 //设置GUI的文本颜色

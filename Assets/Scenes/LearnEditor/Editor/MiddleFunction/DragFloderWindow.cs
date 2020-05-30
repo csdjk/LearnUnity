@@ -15,7 +15,7 @@ public class DragFloderWindow : EditorWindow
     public Rect buildPathRect;
 
 
-    [MenuItem("长生但酒狂的插件/文件拖拽")]
+    [MenuItem("Editor教程/常用小功能/文件拖拽")]
     static void createWindow()
     {
         var window = EditorWindow.GetWindow<DragFloderWindow>(false, "FolderWindow");

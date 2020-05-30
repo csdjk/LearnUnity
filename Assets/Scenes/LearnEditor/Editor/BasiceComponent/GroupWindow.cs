@@ -6,7 +6,7 @@ using UnityEditor;
 public class GroupWindow : EditorWindow
 {
 
-    [MenuItem("Editor基本组件/字段分组")]
+    [MenuItem("Editor教程/基本组件/字段分组")]
     public static void showWindow()
     {
         EditorWindow.GetWindow<GroupWindow>().Show();

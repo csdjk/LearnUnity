@@ -7,7 +7,7 @@ using UnityEditor;
 public class TagLayer : EditorWindow 
 {
 
-    [MenuItem("Editor基本组件/标签、层、对象选择")]
+    [MenuItem("Editor教程/基本组件/标签、层、对象选择")]
     public static void showWindow()
     {
         EditorWindow.GetWindow<TagLayer>().Show();

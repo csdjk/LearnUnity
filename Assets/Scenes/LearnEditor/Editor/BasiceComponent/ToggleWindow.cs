@@ -5,7 +5,7 @@ using UnityEditor;
 public class ToggleWindow : EditorWindow 
 {
 
-    [MenuItem("Editor基本组件/单选字段选择")]
+    [MenuItem("Editor教程/基本组件/单选字段选择")]
     public static void showWindow()
     {
         EditorWindow.GetWindow<ToggleWindow>().Show();

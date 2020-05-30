@@ -5,7 +5,7 @@ using UnityEditor;
 public class CustomWindowEvents : EditorWindow
 {
 
-    [MenuItem("Editor基本组件/窗口2")]
+    [MenuItem("Editor教程/基本组件/窗口2")]
     public static void showWindwo()
     {
         //利用单例只可以打开一个窗口
