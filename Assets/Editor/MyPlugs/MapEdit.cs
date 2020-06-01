@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -22,6 +23,10 @@ public class MapEdit : EditorWindow
     private int selectMapIndex = 0;
     private int selectObjIndex = 0;
 
+    private Editor mapTempEditor;
+    private Editor mapEditor;
+    private Editor objEditor;
+
     private GameObject curMap;
     private string curMapName;
     private int curMapID;
@@ -32,19 +37,21 @@ public class MapEdit : EditorWindow
     private Vector3 curObjPos;
 
 
-    [MenuItem("长生但酒狂的插件/地图编辑")]
+    [MenuItem("长生但酒狂的插件/地图编辑器")]
     public static void showWindow()
     {
         editor = EditorWindow.GetWindow<MapEdit>();
         editor.Show();
-        EditorApplication.hierarchyChanged += OnHierarchyChanged;
-        SceneView.duringSceneGui += OnScene;
     }
 
     private void Awake()
     {
+        SceneView.duringSceneGui += OnScene;
+        EditorApplication.hierarchyChanged += OnHierarchyChanged;
+
         mapTempLists = FindAllObjFromFiles(mapTempsPath);
         mapLists = FindAllObjFromFiles(mapsPath);
+        objsLists = FindAllObjFromFiles(objsPath);
         if (mapLists.Length == 0)
         {
             Debug.Log("没有找到地图, 请新创建一个地图");
@@ -53,24 +60,48 @@ public class MapEdit : EditorWindow
         Debug.Log(mapsPath + "/" + mapLists[0]);
         // 实例化
         ReloadMap(0);
-
+        mapTempEditor = CreateGameObjectPreview("mapTemp");
+        mapEditor = CreateGameObjectPreview("map");
+        objEditor = CreateGameObjectPreview("obj");
     }
 
-    public void OnGUI()
+    Editor CreateGameObjectPreview(string type)
     {
-        GUIStyle titleSkin = new GUIStyle();
-        titleSkin.normal.textColor = Color.yellow;
+        string path = "";
+        switch (type)
+        {
+            case "mapTemp":
+                path = Path.Combine(mapTempsPath, mapTempLists[selectMapTempIndex] + ".prefab");
+                break;
+            case "map":
+                path = Path.Combine(mapsPath, mapLists[selectMapIndex] + ".prefab");
+                break;
+            case "obj":
+                path = Path.Combine(objsPath, objsLists[selectObjIndex] + ".prefab");
+                break;
+        }
+        GameObject gameObject = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+        return Editor.CreateEditor(gameObject);
+    }
 
-        GUIStyle btnSkin = GUI.skin.GetStyle("flow node 4");
+    // 【新地图】
+    void DrawNewMapGUI(GUIStyle titleSkin)
+    {
+        CreateCenterHorizontalLayout(() =>
+        {
+            GUILayout.Label("  新地图:", titleSkin);
+        });
 
-        EditorGUILayout.Space(20);
-        GUILayout.Label("  新地图:", titleSkin);
+        GUILayout.Space(10);
 
         EditorGUILayout.BeginHorizontal();
         {
             GUILayout.Space(30);
             GUILayout.Label("地图模板:");
+            int preMapTempIndex = selectMapTempIndex;
             selectMapTempIndex = EditorGUILayout.Popup(selectMapTempIndex, mapTempLists);
+            if (preMapTempIndex != selectMapTempIndex)
+                mapTempEditor = CreateGameObjectPreview("mapTemp");
             GUILayout.Space(50);
 
             GUILayout.Label("name:");
@@ -82,24 +113,39 @@ public class MapEdit : EditorWindow
             GUILayout.Space(50);
         }
         EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.Space(10);
+        // 预览图
+        if (mapTempEditor)
+            mapTempEditor.OnPreviewGUI(GUILayoutUtility.GetRect(100, 100), EditorStyles.whiteLabel);
+
         EditorGUILayout.Space(10);
 
         if (GUILayout.Button("创建新地图"))
         {
             CreateNewMap();
         }
-        EditorGUILayout.Space(20);
+    }
 
-        GUILayout.Label("  编辑地图:", titleSkin);
+    void DrawEditMapGUI(GUIStyle titleSkin)
+    {
+        CreateCenterHorizontalLayout(() =>
+        {
+            GUILayout.Label("  编辑地图:", titleSkin);
+        });
+        GUILayout.Space(10);
 
         EditorGUILayout.BeginHorizontal();
         {
             GUILayout.Space(30);
             GUILayout.Label("选择地图:");
-            // mapLists = FindAllObjFromFiles(mapsPath);
             int preMapIndex = this.selectMapIndex;
             selectMapIndex = EditorGUILayout.Popup(this.selectMapIndex, mapLists);
-            if (preMapIndex != selectMapIndex) ReloadMap(selectMapIndex);
+            if (preMapIndex != selectMapIndex)
+            {
+                ReloadMap(selectMapIndex);
+                mapEditor = CreateGameObjectPreview("map");
+            }
             GUILayout.Space(50);
             // 
             GUILayout.Label("name:");
@@ -111,20 +157,38 @@ public class MapEdit : EditorWindow
             GUILayout.Space(30);
         }
         EditorGUILayout.EndHorizontal();
-        EditorGUILayout.Space();
+
+        EditorGUILayout.Space(10);
+
+        // 预览图
+        if (mapEditor)
+            mapEditor.OnPreviewGUI(GUILayoutUtility.GetRect(100, 100), EditorStyles.whiteLabel);
+
+        EditorGUILayout.Space(10);
         if (GUILayout.Button("删除地图:"))
         {
             DeleteMap();
         }
-        EditorGUILayout.Space(20);
+    }
 
-        GUILayout.Label("  创建物体:", titleSkin);
+    void DrawNewObjectGUI(GUIStyle titleSkin)
+    {
+        CreateCenterHorizontalLayout(() =>
+       {
+           GUILayout.Label("  创建物体:", titleSkin);
+       });
+
+        GUILayout.Space(10);
+
         EditorGUILayout.BeginHorizontal();
         {
             GUILayout.Space(30);
             GUILayout.Label("物体:");
             objsLists = FindAllObjFromFiles(objsPath);
-            selectObjIndex = EditorGUILayout.Popup(this.selectObjIndex, objsLists);
+            int preObjIndex = selectObjIndex;
+            selectObjIndex = EditorGUILayout.Popup(selectObjIndex, objsLists);
+            if (preObjIndex != selectObjIndex)
+                objEditor = CreateGameObjectPreview("obj");
             GUILayout.Space(50);
 
             GUILayout.Label("输入ID");
@@ -142,15 +206,37 @@ public class MapEdit : EditorWindow
         this.curObjPos = EditorGUILayout.Vector3Field("坐标: ", this.curObjPos);
         EditorGUILayout.EndHorizontal();
 
+        GUILayout.Space(10);
+
+        // 预览图
+        if (objEditor)
+            objEditor.OnPreviewGUI(GUILayoutUtility.GetRect(100, 100), EditorStyles.whiteLabel);
+
+
         EditorGUILayout.Space(10);
 
-        if (GUILayout.Button("创建物体"))
+        if (GUILayout.Button("创建物体 (或者鼠标点击地图指定位置快速创建)"))
         {
-            CreateGameObj();
+            CreateGameObj(curObjPos, Vector3.up);
         }
-
+    }
+    public void OnGUI()
+    {
+        GUIStyle titleSkin = new GUIStyle();
+        titleSkin.normal.textColor = Color.yellow;
+        titleSkin.fontSize = 20;
+        GUIStyle btnSkin = GUI.skin.GetStyle("flow node 4");
+        // ---------------------------【新地图】---------------------------
+        EditorGUILayout.Space(20);
+        DrawNewMapGUI(titleSkin);
+        // ---------------------------【编辑地图】---------------------------
+        EditorGUILayout.Space(20);
+        DrawEditMapGUI(titleSkin);
+        // ---------------------------【创建物体】---------------------------
+        EditorGUILayout.Space(20);
+        DrawNewObjectGUI(titleSkin);
+        // ---------------------------【保存当前地图按钮】---------------------------
         EditorGUILayout.Space(50);
-        // 水平居中
         GUILayout.BeginHorizontal();
         {
             GUILayout.FlexibleSpace();
@@ -160,7 +246,6 @@ public class MapEdit : EditorWindow
             }
             GUILayout.FlexibleSpace();
         }
-
         GUILayout.EndHorizontal();
     }
 
@@ -244,10 +329,12 @@ public class MapEdit : EditorWindow
         curMap.name = mapLists[index];
         curMapID = curMap.GetComponent<MapObj>().id;
         curMapName = curMap.name;
+
+        curObjID = curMap.transform.GetChild(curMap.transform.childCount - 1).GetComponent<MapObj>().id + 1;
     }
 
     // 创建物体
-    void CreateGameObj()
+    void CreateGameObj(Vector3 pos, Vector3 up)
     {
         if (curMap == null)
         {
@@ -266,7 +353,7 @@ public class MapEdit : EditorWindow
 
         GameObject go = Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(objsPath + "/" + objsLists[selectObjIndex] + ".prefab"));
         go.transform.parent = curMap.transform;
-        go.transform.position = curObjPos;
+        go.transform.position = pos;
         go.name = objsLists[selectObjIndex];
         MapObj objScript = go.GetComponent<MapObj>();
         objScript = objScript ? objScript : go.AddComponent<MapObj>();
@@ -276,6 +363,7 @@ public class MapEdit : EditorWindow
         // 取消聚焦
         GUI.FocusControl(null);
     }
+
 
     // 查找所有文件夹下所有物体
     string[] FindAllObjFromFiles(string path)
@@ -295,12 +383,11 @@ public class MapEdit : EditorWindow
         objs.Clear();
         foreach (Transform child in curMap.transform)
         {
-            Debug.Log(child.name);
             Dictionary<string, object> obj = new Dictionary<string, object>();
             obj.Add("id", child.GetComponent<MapObj>().id);
-            obj.Add("x", child.position.x);
-            obj.Add("y", child.position.y);
-            obj.Add("z", child.position.z);
+            obj.Add("x", Round(child.position.x));
+            obj.Add("y", Round(child.position.y));
+            obj.Add("z", Round(child.position.z));
             objs.Add(obj);
         }
         string objstring = JsonConvert.SerializeObject(objs);
@@ -378,7 +465,6 @@ public class MapEdit : EditorWindow
         }
     }
 
-
     // ->销毁窗口
     public void OnDestroy()
     {
@@ -394,76 +480,137 @@ public class MapEdit : EditorWindow
     public static Vector2 mPos;
     public static Vector2 centerBoxSize = new Vector2(200, 80);
     public static bool isDrawObjInfo = true;
+    public static bool isFastCreateObj = true;
     private static void OnScene(SceneView sceneview)
     {
 
         if (MapEdit.editor && MapEdit.editor.curMap)
         {
-            Vector2 centerBoxPos = new Vector2(Screen.width / 2 - centerBoxSize.x / 2, 10);
-
+            Event e = Event.current;
             GUIStyle boxSink = new GUIStyle("box");
             boxSink.normal.textColor = Color.yellow;
-
             GUIStyle btnSink = new GUIStyle("sv_label_3");
-
             Handles.BeginGUI();
-            // 地图信息(左上角)
-            GUI.Box(new Rect(0, 0, 200, 220), "地图信息", boxSink);
-            GUI.Box(new Rect(0, 0, 200, 220), "地图信息", boxSink);
-            GUILayout.Label("当前编辑的地图 : " + MapEdit.editor.curMap.name);
-            GUILayout.Label("ID:  " + editor.curMap.GetComponent<MapObj>().id);
-            GUILayout.Label("个子物体: " + editor.curMap.transform.childCount);
-
-            mPos = GUILayout.BeginScrollView(mPos, GUILayout.Width(200), GUILayout.Height(130));
-            foreach (Transform child in editor.curMap.transform)
+            DrawMapInfoBox(boxSink, btnSink);
+            DrawSelectObjInfoBox(boxSink, btnSink);
+            DrawFunctionInfoBox(boxSink);
+            // 点击场景快速创建
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 0 && isFastCreateObj)
             {
-                GUILayout.BeginHorizontal();
-                GUILayout.Label(child.GetComponent<MapObj>().id + ": " + child.name);
-                if (GUILayout.Button("删除", btnSink))
-                {
-                    DestroyImmediate(child.gameObject);
-                }
-
-                GUILayout.EndHorizontal();
+                editor.CreateGameObjectMouse();
             }
-            GUILayout.EndScrollView();
-            // 当前选中物体信息UI
-            if (Selection.activeTransform)
-            {
-                GameObject selectObj = Selection.activeTransform.gameObject;
-                MapObj selectScript = selectObj.GetComponent<MapObj>();
-                // 当前选中物体
-                GUILayout.BeginArea(new Rect(centerBoxPos.x, centerBoxPos.y, centerBoxSize.x, centerBoxSize.y), "当前选中物体", boxSink);
-                GUILayout.Space(30);
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.FlexibleSpace();
-                GUILayout.Label("Name: " + selectObj.name);
-                GUILayout.Label("ID: " + selectScript.id);
-                GUILayout.FlexibleSpace();
-                EditorGUILayout.EndHorizontal();
-                GUILayout.Space(10);
-                if (GUILayout.Button("删除当前选中物体", btnSink))
-                {
-                    // 地图
-                    if (selectScript.id < 10000)
-                    {
-                        if (EditorUtility.DisplayDialog("警告", "当前选中的是地图! 是否确认删除?", "Ok", "Cancel"))
-                            editor.DeleteMap();
-                    }
-                    else
-                        DestroyImmediate(selectObj);
-                }
-                GUILayout.EndArea();
-            }
-
-            // 是否开启GameObject info UI
-            Vector2 togglePos = new Vector2(Screen.width - 300, 0);
-            GUI.Box(new Rect(togglePos.x, togglePos.y, 160, 100), "功能面板", boxSink);
-            isDrawObjInfo = GUI.Toggle(new Rect(togglePos.x + 20, togglePos.y + 10, 120, 50), isDrawObjInfo, "开启物体信息面板");
-
             Handles.EndGUI();
+
+            // 禁止移动map
+            if (!editor.curMap.transform.position.Equals(Vector3.zero))
+            {
+                editor.curMap.transform.position = Vector3.zero;
+            }
         }
     }
+
+    // 绘制地图信息面板
+    static void DrawMapInfoBox(GUIStyle boxSink, GUIStyle btnSink)
+    {
+        GUI.Box(new Rect(0, 0, 200, 220), "地图信息", boxSink);
+        GUI.Box(new Rect(0, 0, 200, 220), "地图信息", boxSink);
+        GUILayout.Label("当前编辑的地图 : " + MapEdit.editor.curMap.name);
+        GUILayout.Label("ID:  " + editor.curMap.GetComponent<MapObj>().id);
+        GUILayout.Label("子物体: " + editor.curMap.transform.childCount);
+
+        mPos = GUILayout.BeginScrollView(mPos, GUILayout.Width(200), GUILayout.Height(130));
+        foreach (Transform child in editor.curMap.transform)
+        {
+            MapObj childScript = child.GetComponent<MapObj>();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(childScript.id + ": " + child.name);
+            if (GUILayout.Button("删除", btnSink))
+            {
+                DestroyImmediate(child.gameObject);
+            }
+            GUILayout.EndHorizontal();
+        }
+        GUILayout.EndScrollView();
+    }
+
+    // 绘制当前选中物体信息面板
+    static void DrawSelectObjInfoBox(GUIStyle boxSink, GUIStyle btnSink)
+    {
+        if (Selection.activeTransform)
+        {
+            Vector2 centerBoxPos = new Vector2(Screen.width / 2 - centerBoxSize.x / 2, 10);
+            GameObject selectObj = Selection.activeTransform.gameObject;
+            MapObj selectScript = selectObj.GetComponent<MapObj>();
+            // 当前选中物体
+            GUILayout.BeginArea(new Rect(centerBoxPos.x, centerBoxPos.y, centerBoxSize.x, centerBoxSize.y), "当前选中物体", boxSink);
+            GUILayout.Space(30);
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.Label("Name: " + selectObj.name);
+            GUILayout.Label("ID: " + selectScript.id);
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(10);
+            if (GUILayout.Button("删除当前选中物体", btnSink))
+            {
+                // 地图
+                if (selectObj.Equals(editor.curMap))
+                {
+                    if (EditorUtility.DisplayDialog("警告", "当前选中的是地图! 是否确认删除?", "Ok", "Cancel"))
+                        editor.DeleteMap();
+                }
+                else
+                    DestroyImmediate(selectObj);
+            }
+            GUILayout.EndArea();
+        }
+    }
+
+    // 其他功能面板
+    static void DrawFunctionInfoBox(GUIStyle boxSink)
+    {
+        Vector2 boxPos = new Vector2(Screen.width - 300, 0);
+        GUILayout.BeginArea(new Rect(boxPos.x, boxPos.y, 160, 100), "功能面板", boxSink);
+        GUILayout.Space(20);
+
+        // 物体信息面板开关
+        GUILayout.BeginHorizontal();
+        {
+            GUILayout.FlexibleSpace();
+            isDrawObjInfo = GUILayout.Toggle(isDrawObjInfo, "开启物体信息面板");
+            GUILayout.FlexibleSpace();
+        }
+        GUILayout.EndHorizontal();
+
+        GUILayout.Space(20);
+
+        // 快速创建开关
+        GUILayout.BeginHorizontal();
+        {
+            GUILayout.FlexibleSpace();
+            isFastCreateObj = GUILayout.Toggle(isFastCreateObj, "开启快速创建物体");
+            GUILayout.FlexibleSpace();
+        }
+        GUILayout.EndHorizontal();
+
+
+        GUILayout.EndArea();
+    }
+
+
+    // 鼠标创建物体
+    private void CreateGameObjectMouse()
+    {
+        Event e = Event.current;
+        //Upside-down and offset a little because of menus
+        Ray ray = SceneView.lastActiveSceneView.camera.ScreenPointToRay(new Vector3(e.mousePosition.x, Screen.height - e.mousePosition.y - 36, 0));
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 1000.0f))
+        {
+            CreateGameObj(hit.point, hit.normal);
+        }
+    }
+
 
     //当层级视图中的对象或对象组发生更改时引发的事件
     private static void OnHierarchyChanged()
@@ -475,4 +622,32 @@ public class MapEdit : EditorWindow
             Debug.LogError("非法操作! 禁止拖拽物体到场景! 请通过编辑器添加物体!");
         }
     }
+
+    decimal Round(float num)
+    {
+        return Math.Round((decimal)num, 2, MidpointRounding.AwayFromZero);
+    }
+
+    public void CreateCenterHorizontalLayout(Action fun)
+    {
+        EditorGUILayout.BeginHorizontal();
+        {
+            GUILayout.FlexibleSpace();
+            fun();
+            GUILayout.FlexibleSpace();
+        }
+        EditorGUILayout.EndHorizontal();
+    }
+
+    public void CreateCenterVerticalLayout(Action fun)
+    {
+        EditorGUILayout.BeginVertical();
+        {
+            GUILayout.FlexibleSpace();
+            fun();
+            GUILayout.FlexibleSpace();
+        }
+        EditorGUILayout.EndVertical();
+    }
+
 }
