@@ -19,5 +19,4 @@ public class EventTest : MonoBehaviour {
     void ShowText(string s){
         Debug.Log(s);
     }
-
 }

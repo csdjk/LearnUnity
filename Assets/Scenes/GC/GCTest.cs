@@ -66,7 +66,7 @@ public class GCTest : MonoBehaviour {
         // String_Test_Update ();
         // String_Test_optimize_Update ();
 
-        StringPerformance();
-        StringPerformance_O();
+        // StringPerformance();
+        // StringPerformance_O();
     }
 }
