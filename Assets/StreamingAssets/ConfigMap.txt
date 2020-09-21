@@ -1,0 +1,2 @@
+skill_arrow=skill_arrow
+skill_red=skill_red

@@ -1,0 +1,16 @@
+{
+    "FormattingOptions": {
+        "NewLinesForBracesInLambdaExpressionBody": true,
+        "NewLinesForBracesInAnonymousMethods": true,
+        "NewLinesForBracesInAnonymousTypes": true,
+        "NewLinesForBracesInControlBlocks": true,
+        "NewLinesForBracesInTypes": true,
+        "NewLinesForBracesInMethods": true,
+        "NewLinesForBracesInProperties": true,
+        "NewLinesForBracesInObjectCollectionArrayInitializers": true,
+        "NewLinesForBracesInAccessors": true,
+        "NewLineForElse": true,
+        "NewLineForCatch": true,
+        "NewLineForFinally": true
+    }
+}

@@ -54,8 +54,8 @@ public class LoadFormFileAB : MonoBehaviour
     IEnumerator GetAssetBundle()
     {
         Debug.Log(Application.dataPath);
-        string uri = @"http://localhost/AssetBundles/obj.lcl";
-        UnityWebRequest www = UnityWebRequestAssetBundle.GetAssetBundle(uri);
+        string url = @"http://localhost/AssetBundles/obj.lcl";
+        UnityWebRequest www = UnityWebRequestAssetBundle.GetAssetBundle(url);
         yield return www.SendWebRequest();
         if (www.isNetworkError || www.isHttpError)
         {
