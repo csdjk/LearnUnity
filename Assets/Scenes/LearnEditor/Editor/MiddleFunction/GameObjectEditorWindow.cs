@@ -9,7 +9,7 @@ public class GameObjectEditorWindow : EditorWindow
     [MenuItem("Editor教程/常用小功能/预览GameObject")]
     static void ShowWindow()
     {
-        GetWindow<GameObjectEditorWindow>("GameObject Editor");
+        GetWindow<GameObjectEditorWindow>("预览GameObject");
     }
 
     void OnGUI()

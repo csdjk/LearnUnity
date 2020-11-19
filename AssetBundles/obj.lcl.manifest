@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 699242028
+CRC: 2092039819
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 3d871a394269e65cf945d5768be52b3a
+    Hash: 670ae02fe6329cf7940f0afb408ac34c
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 98bf8902dba10ca277db995a4b6ea698
+    Hash: dc65a783c702502990c50ecdc8ae54a7
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -29,4 +29,4 @@ Assets:
 - Assets/Scenes/LoadFormFileAssetBundle/Prefabs/assetBundle_Sphere.prefab
 - Assets/Scenes/LoadFormFileAssetBundle/Prefabs/assetBundle_Cube.prefab
 Dependencies:
-- E:/WorkSpaces/Unity/LearnUnity/AssetBundles/matrials.lcl
+- E:/UnityProjects/LearnUnity/AssetBundles/matrials.lcl
