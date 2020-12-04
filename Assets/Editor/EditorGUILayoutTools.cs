@@ -34,7 +34,7 @@ public class EditorGUILayoutTools
 
         DrawField(title, ref value, (v) =>
         {
-            return EditorGUILayout.FloatField(title, v);
+            return EditorGUILayout.FloatField(v);
         }, (v) =>
         {
             changeHandler(v);
@@ -98,6 +98,16 @@ public class EditorGUILayoutTools
         {
             changeHandler(v);
         });
+    }
+    // 
+    public static void DrawGradientField(string title, ref Gradient value, Action<Gradient> changeHandler)
+    {
+        DrawField(title, ref value, (v) =>
+        {
+            return EditorGUILayout.GradientField(v);
+        }, (v) => {});
+        // 因为Gradient 不好比较 就直接执行了
+        changeHandler(value);
     }
 
     public static void DrawTextField(string title, ref string value, Action<string> changeHandler)
