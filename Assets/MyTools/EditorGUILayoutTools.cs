@@ -1,13 +1,26 @@
 using UnityEditor;
 using System;
 using UnityEngine;
-using UnityEngine;
 
 public class EditorGUILayoutTools
 {
-    public static float RowSpace = 5;
-    public static float HeadSpace = 10;
+    public static float RowSpace = 15;
+    public static float HeadSpace = 20;
+    // 水平布局
+    public static void Horizontal(Action func)
+    {
+        GUILayout.Space(RowSpace);
 
+        EditorGUILayout.BeginHorizontal();
+        {
+            GUILayout.Space(HeadSpace);
+            func();
+            GUILayout.Space(HeadSpace);
+
+        }
+        EditorGUILayout.EndHorizontal();
+    }
+    /// 绘制领域 
     public static void DrawField<T>(string title, ref T value, Func<T, T> func, Action<T> changeHandler)
     {
         GUILayout.Space(RowSpace);
@@ -15,6 +28,7 @@ public class EditorGUILayoutTools
         {
             GUILayout.Space(HeadSpace);
             GUILayout.Label(title);
+            
             T preValue = value;
 
             value = func(value);
@@ -105,7 +119,7 @@ public class EditorGUILayoutTools
         DrawField(title, ref value, (v) =>
         {
             return EditorGUILayout.GradientField(v);
-        }, (v) => {});
+        }, (v) => { });
         // 因为Gradient 不好比较 就直接执行了
         changeHandler(value);
     }
