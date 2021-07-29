@@ -1,7 +1,9 @@
 using UnityEditor;
 using System;
 using UnityEngine;
-
+using System.Collections.Generic;
+using Object = UnityEngine.Object;
+#if UNITY_EDITOR
 public class EditorGUILayoutTools
 {
     public static float RowSpace = 15;
@@ -28,7 +30,7 @@ public class EditorGUILayoutTools
         {
             GUILayout.Space(HeadSpace);
             GUILayout.Label(title);
-            
+
             T preValue = value;
 
             value = func(value);
@@ -49,10 +51,7 @@ public class EditorGUILayoutTools
         DrawField(title, ref value, (v) =>
         {
             return EditorGUILayout.FloatField(v);
-        }, (v) =>
-        {
-            changeHandler(v);
-        });
+        }, changeHandler);
     }
     // 
     public static void DrawSliderField(string title, ref float value, float max, Action<float> changeHandler)
@@ -60,10 +59,7 @@ public class EditorGUILayoutTools
         DrawField(title, ref value, (v) =>
         {
             return EditorGUILayout.Slider(v, 0, max);
-        }, (v) =>
-        {
-            changeHandler(v);
-        });
+        }, changeHandler);
     }
 
 
@@ -73,10 +69,7 @@ public class EditorGUILayoutTools
         DrawField(title, ref value, (v) =>
         {
             return EditorGUILayout.ObjectField(v, type, true) as T;
-        }, (v) =>
-        {
-            changeHandler(v);
-        });
+        }, changeHandler);
     }
 
     // 绘制 下拉列表 UI
@@ -85,10 +78,7 @@ public class EditorGUILayoutTools
         DrawField(title, ref value, (v) =>
        {
            return (T)EditorGUILayout.EnumPopup(v);
-       }, (v) =>
-       {
-           changeHandler(v);
-       });
+       },changeHandler);
     }
 
     // 绘制 下拉列表 UI
@@ -108,10 +98,7 @@ public class EditorGUILayoutTools
         DrawField(title, ref value, (v) =>
         {
             return EditorGUILayout.ColorField(v);
-        }, (v) =>
-        {
-            changeHandler(v);
-        });
+        }, changeHandler);
     }
     // 
     public static void DrawGradientField(string title, ref Gradient value, Action<Gradient> changeHandler)
@@ -129,9 +116,88 @@ public class EditorGUILayoutTools
         DrawField(title, ref value, (v) =>
         {
             return EditorGUILayout.TextField(v);
-        }, (v) =>
-        {
-            changeHandler(v);
-        });
+        }, changeHandler);
     }
+
+    // 绘制文件路径(支持拖拽)
+    public static void DrawPathField(string title, ref string value, bool isFullPath, Action<string> changeHandler)
+    {
+        GUI.SetNextControlName(title);//设置下一个控件的名字
+        Rect pathRect = new Rect();
+        DrawField(title, ref value, (v) =>
+        {
+            pathRect = EditorGUILayout.GetControlRect();
+            return EditorGUI.TextField(pathRect, v);
+        }, changeHandler);
+        //拖入窗口未松开鼠标
+        if (Event.current.type == EventType.DragUpdated)
+        {
+            DragAndDrop.visualMode = DragAndDropVisualMode.Generic;//改变鼠标外观
+            if (pathRect.Contains(Event.current.mousePosition))
+                GUI.FocusControl(title);
+        }
+        //拖入窗口并松开鼠标
+        else if (Event.current.type == EventType.DragExited)
+        {
+            if (pathRect.Contains(Event.current.mousePosition))
+            {
+                value = DragAndDrop.paths[0];
+                if (isFullPath && value.StartsWith("Assets"))
+                {
+                    value = Application.dataPath + value.Replace("Assets", string.Empty);
+                }
+
+                GUI.FocusControl(null);// 取消焦点(不然GUI不会刷新)
+                changeHandler(value);
+            }
+        }
+    }
+
+    // 绘制多个文件(支持拖拽)
+    public static Object newObject;
+    public static void DrawMoreObjectField(string title, ref List<Object> objectList, Action<Object> changeHandler)
+    {
+        EditorGUILayout.BeginHorizontal();
+        {
+            GUILayout.FlexibleSpace();
+            GUILayout.Label(title);
+            GUILayout.FlexibleSpace();
+        }
+        EditorGUILayout.EndHorizontal();
+
+        for (int i = 0; i < objectList.Count; i++)
+        {
+            GUILayout.Space(RowSpace);
+
+            EditorGUILayout.BeginHorizontal();
+            {
+                GUILayout.Space(HeadSpace);
+                objectList[i] = EditorGUILayout.ObjectField("文件夹" + (i + 1), objectList[i], typeof(Object), false);
+                if (GUILayout.Button("Delete", GUILayout.Width(50), GUILayout.Height(15)))
+                {
+                    changeHandler(objectList[i]);
+                    objectList.RemoveAt(i);
+                }
+                GUILayout.Space(HeadSpace);
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        var objectListNew = objectList;
+        DrawObjectField("添加文件夹", ref newObject, typeof(Object), (v) =>
+         {
+             if (objectListNew.Contains(newObject))
+             {
+                 EditorUtility.DisplayDialog("添加失败!", "已经添加该文件夹", "OK");
+             }
+             else
+             {
+                 changeHandler(newObject);
+                 objectListNew.Add(newObject);
+             }
+             newObject = null;
+         });
+    }
+
 }
+#endif
