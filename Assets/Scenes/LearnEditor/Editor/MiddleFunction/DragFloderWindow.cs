@@ -3,11 +3,16 @@
 
 using UnityEngine;
 using UnityEditor;
+using Object = UnityEngine.Object;
+
 // ---------------------------【文件拖拽到Editor面板】---------------------------
 public class DragFloderWindow : EditorWindow
 {
-      // 当前选择路径
+    Object destDir = null;
+
+    // 当前选择路径
     public string path = "Assets";
+    public string path1 = "Assets";
     public Rect pathRect;
     public GUILayoutOption test;
     // 打包后的文件
@@ -24,7 +29,8 @@ public class DragFloderWindow : EditorWindow
     }
     private void OnGUI()
     {
-         // 需要构建的路径
+        // 方法一：
+        // 需要构建的路径
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("需要打包的路径 (鼠标拖拽文件夹到这里)");
         EditorGUILayout.Space();
@@ -45,6 +51,15 @@ public class DragFloderWindow : EditorWindow
 
         // 文件拖拽
         DragFolder();
+
+
+        // 方法二（更简洁）：
+        EditorGUILayoutTools.DrawObjectField("添加文件夹", ref destDir, typeof(Object), (v) =>
+        {
+            path1 = AssetDatabase.GetAssetPath(destDir);
+            Debug.Log("路径：" + path1);
+        });
+        EditorGUILayout.TextField(path1);
     }
 
     void DragFolder()
