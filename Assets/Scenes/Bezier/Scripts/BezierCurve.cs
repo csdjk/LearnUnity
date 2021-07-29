@@ -127,8 +127,8 @@ public class BezierCurve
         return isChange;
     }
 
-    // public string Method(string parameter)
-    // {
-    //     var list = new Stack();
-    // }
+    public string Method(string parameter)
+    {
+        var list = new Stack()
+    }
 }
